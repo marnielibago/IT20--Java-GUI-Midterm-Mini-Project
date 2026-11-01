@@ -22,8 +22,12 @@ public class HotelReservationGUI extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(8, 8));
         mainPanel.setPreferredSize(new Dimension(360, 450));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-         tracker.addRoom(101, "Single", 1500);
+
+
+        //// Pre-load Initial Default Rooms
+        tracker.addRoom(102, "Double", 1800);
+        tracker.assignRoom(102, "Devine Grace");
+        tracker.addRoom(101, "Single", 1500);
         tracker.assignRoom(101, "Aiza Datu");
         tracker.addRoom(103, "Suite", 3500);
         tracker.assignRoom(103, "Kei Nagase");
