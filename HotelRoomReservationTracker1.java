@@ -1,5 +1,6 @@
 public class HotelRoomReservationTracker1 {
 
+    
     public static class Room {
         public int roomNumber;
         public String roomType, guestName, status;
