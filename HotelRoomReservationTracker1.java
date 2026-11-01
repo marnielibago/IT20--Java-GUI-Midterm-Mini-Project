@@ -1,33 +1,28 @@
-package hotelroomreservationtracker1;
 
-import javax.swing.SwingUtilities;
+package hotelroomreservationtracker1;
 
 public class HotelRoomReservationTracker1 {
 
-    public static final int MAX_ROOMS = 100;
-
-    // --- INNER CLASS FOR ROOM DATA ---
+    // ROOM INFORMATION
     public static class Room {
         public int roomNumber;
-        public String roomType;
+        public String roomType, guestName, status;
         public double price;
-        public String guestName;
-        public String status;
 
-        public Room(int roomNumber, String roomType, double price) {
-            this.roomNumber = roomNumber;
-            this.roomType = roomType;
+        public Room(int number, String type, double price) {
+            roomNumber = number;
+            roomType = type;
             this.price = price;
-            this.guestName = "N/A";
-            this.status = "Available";
+            guestName = "N/A";
+            status = "Available";
         }
     }
 
-    // MANUAL FIXED-SIZE ARRAY (ZERO JAVA.UTIL IMPORTS)
-    private final Room[] rooms = new Room[MAX_ROOMS];
+    // MANUAL ARRAY
+    private Room[] rooms = new Room[100];
     private int size = 0;
 
-    // MANUAL LINEAR SEARCH
+    // LINEAR SEARCH
     public int searchRoom(int number) {
         for (int i = 0; i < size; i++) {
             if (rooms[i].roomNumber == number) {
@@ -37,15 +32,12 @@ public class HotelRoomReservationTracker1 {
         return -1;
     }
 
-    // ADD ROOMS
+    // ADD ROOM
     public boolean addRoom(int number, String type, double price) {
-        if (size >= MAX_ROOMS
-                || number <= 0
-                || type == null
-                || type.trim().isEmpty()
-                || !Double.isFinite(price)
-                || price <= 0
-                || searchRoom(number) != -1) {
+        if (size == rooms.length || number <= 0 ||
+            !Double.isFinite(price) || price <= 0 ||
+            type == null || type.trim().isEmpty() ||
+            searchRoom(number) != -1) {
             return false;
         }
 
@@ -56,44 +48,45 @@ public class HotelRoomReservationTracker1 {
 
     // ASSIGN ROOM
     public boolean assignRoom(int number, String guest) {
-        int index = searchRoom(number);
+        int i = searchRoom(number);
 
-        if (index == -1 || guest == null
-                || guest.trim().isEmpty()
-                || "Occupied".equalsIgnoreCase(rooms[index].status)) {
+        if (i == -1 || guest == null ||
+            guest.trim().isEmpty() ||
+            rooms[i].status.equals("Occupied")) {
             return false;
         }
 
-        rooms[index].guestName = guest.trim();
-        rooms[index].status = "Occupied";
+        rooms[i].guestName = guest.trim();
+        rooms[i].status = "Occupied";
         return true;
     }
 
-    // PARA VACATE ROOM
+    // VACATE ROOM
     public boolean vacateRoom(int number) {
-        int index = searchRoom(number);
+        int i = searchRoom(number);
 
-        if (index == -1 || "Available".equalsIgnoreCase(rooms[index].status)) {
+        if (i == -1 || rooms[i].status.equals("Available")) {
             return false;
         }
 
-        rooms[index].guestName = "N/A";
-        rooms[index].status = "Available";
+        rooms[i].guestName = "N/A";
+        rooms[i].status = "Available";
         return true;
     }
 
-    // PAG CHANGE SA PRICE
-    public boolean changePrice(int number, double newPrice) {
-        int index = searchRoom(number);
+    // CHANGE PRICE
+    public boolean changePrice(int number, double price) {
+        int i = searchRoom(number);
 
-        if (index == -1 || !Double.isFinite(newPrice) || newPrice <= 0) {
+        if (i == -1 || !Double.isFinite(price) || price <= 0) {
             return false;
         }
 
-        rooms[index].price = newPrice;
+        rooms[i].price = price;
         return true;
     }
 
+    // GET ROOM
     public Room getRoomAt(int index) {
         if (index < 0 || index >= size) {
             return null;
@@ -101,28 +94,25 @@ public class HotelRoomReservationTracker1 {
         return rooms[index];
     }
 
+    // TOTAL ROOMS
     public int getSize() {
         return size;
     }
 
+    // AVAILABLE ROOMS
     public int countAvailableRooms() {
         int count = 0;
+
         for (int i = 0; i < size; i++) {
-            if ("Available".equalsIgnoreCase(rooms[i].status)) {
+            if (rooms[i].status.equals("Available")) {
                 count++;
             }
         }
         return count;
     }
 
+    // OCCUPIED ROOMS
     public int countOccupiedRooms() {
         return size - countAvailableRooms();
-    }
-
-    // --- MAIN METHOD: LAUNCHES THE GUI ---
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new HotelReservationGUI().setVisible(true);
-        });
     }
 }
