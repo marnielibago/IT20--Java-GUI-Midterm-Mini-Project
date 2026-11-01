@@ -148,7 +148,7 @@ public class HotelReservationGUI extends JFrame {
                     options[0]
             );
 
-            //here is assigning
+            //here is assigning and vacate
 
             if (choice == 0) { 
                 String guest = txtGuest.getText().trim();
