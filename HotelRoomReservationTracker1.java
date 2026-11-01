@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package hotelroomreservationtracker1;
 
 import javax.swing.SwingUtilities;

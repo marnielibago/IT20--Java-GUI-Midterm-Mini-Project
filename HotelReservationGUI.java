@@ -28,7 +28,7 @@ public class HotelReservationGUI extends JFrame {
         form.setBorder(BorderFactory.createTitledBorder("Room Information"));
 
         txtNumber = new JTextField();
-        txtType = new JComboBox<>(new String[]{"Single", "Double", "Suite"});
+        txtType = new JComboBox<>(new String[]{"Single", "Double", "Suite", "Family"});
         txtPrice = new JTextField("1200");
         txtGuest = new JTextField();
 
@@ -82,6 +82,8 @@ public class HotelReservationGUI extends JFrame {
             txtPrice.setText("1800");
         } else if ("Suite".equals(type)) {
             txtPrice.setText("3500");
+        } else if ("Family".equals(type)) {
+            txtPrice.setText("5000");
         }
     }
 
