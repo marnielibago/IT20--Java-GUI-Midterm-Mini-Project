@@ -1,9 +1,5 @@
-
-package hotelroomreservationtracker1;
-
 public class HotelRoomReservationTracker1 {
 
-    // ROOM INFORMATION
     public static class Room {
         public int roomNumber;
         public String roomType, guestName, status;
@@ -18,11 +14,21 @@ public class HotelRoomReservationTracker1 {
         }
     }
 
-    // MANUAL ARRAY
-    private Room[] rooms = new Room[100];
-    private int size = 0;
+    public static class Booking {
+        public int roomNumber;
+        public String guestName;
 
-    // LINEAR SEARCH
+        public Booking(int number, String guest) {
+            roomNumber = number;
+            guestName = guest;
+        }
+    }
+
+    private final Room[] rooms = new Room[100];
+    private int size = 0;
+    private final Booking[] waitingQueue = new Booking[100];
+    private int queueSize = 0;
+
     public int searchRoom(int number) {
         for (int i = 0; i < size; i++) {
             if (rooms[i].roomNumber == number) {
@@ -32,77 +38,99 @@ public class HotelRoomReservationTracker1 {
         return -1;
     }
 
-    // ADD ROOM
     public boolean addRoom(int number, String type, double price) {
         if (size == rooms.length || number <= 0 ||
-            !Double.isFinite(price) || price <= 0 ||
-            type == null || type.trim().isEmpty() ||
-            searchRoom(number) != -1) {
+                type == null || type.trim().isEmpty() ||
+                !Double.isFinite(price) || price <= 0 ||
+                searchRoom(number) != -1) {
             return false;
         }
-
-        rooms[size] = new Room(number, type.trim(), price);
-        size++;
+        rooms[size++] = new Room(number, type.trim(), price);
         return true;
     }
 
-    // ASSIGN ROOM
     public boolean assignRoom(int number, String guest) {
         int i = searchRoom(number);
-
-        if (i == -1 || guest == null ||
-            guest.trim().isEmpty() ||
-            rooms[i].status.equals("Occupied")) {
+        if (i == -1 || guest == null || guest.trim().isEmpty() ||
+                rooms[i].status.equals("Occupied")) {
             return false;
         }
-
         rooms[i].guestName = guest.trim();
         rooms[i].status = "Occupied";
         return true;
     }
 
-    // VACATE ROOM
+    public boolean bookInAdvance(int number, String guest) {
+        int i = searchRoom(number);
+        if (i == -1 || guest == null || guest.trim().isEmpty() ||
+                !rooms[i].status.equals("Occupied") ||
+                queueSize == waitingQueue.length) {
+            return false;
+        }
+        waitingQueue[queueSize++] = new Booking(number, guest.trim());
+        return true;
+    }
+
+    public String nextGuestForRoom(int number) {
+        for (int i = 0; i < queueSize; i++) {
+            if (waitingQueue[i].roomNumber == number) {
+                return waitingQueue[i].guestName;
+            }
+        }
+        return null;
+    }
+
     public boolean vacateRoom(int number) {
         int i = searchRoom(number);
-
         if (i == -1 || rooms[i].status.equals("Available")) {
             return false;
         }
 
         rooms[i].guestName = "N/A";
         rooms[i].status = "Available";
+
+        for (int q = 0; q < queueSize; q++) {
+            if (waitingQueue[q].roomNumber == number) {
+              
+                assignRoom(number, waitingQueue[q].guestName);
+        
+                for (int j = q; j < queueSize - 1; j++) {
+                    waitingQueue[j] = waitingQueue[j + 1];
+                }
+                waitingQueue[--queueSize] = null;
+                break;
+            }
+        }
         return true;
     }
 
-    // CHANGE PRICE
     public boolean changePrice(int number, double price) {
         int i = searchRoom(number);
-
         if (i == -1 || !Double.isFinite(price) || price <= 0) {
             return false;
         }
-
         rooms[i].price = price;
         return true;
     }
 
-    // GET ROOM
     public Room getRoomAt(int index) {
-        if (index < 0 || index >= size) {
-            return null;
-        }
-        return rooms[index];
+        return index >= 0 && index < size ? rooms[index] : null;
     }
 
-    // TOTAL ROOMS
+    public Booking getBookingAt(int index) {
+        return index >= 0 && index < queueSize ? waitingQueue[index] : null;
+    }
+
     public int getSize() {
         return size;
     }
 
-    // AVAILABLE ROOMS
+    public int getQueueSize() {
+        return queueSize;
+    }
+
     public int countAvailableRooms() {
         int count = 0;
-
         for (int i = 0; i < size; i++) {
             if (rooms[i].status.equals("Available")) {
                 count++;
@@ -111,7 +139,6 @@ public class HotelRoomReservationTracker1 {
         return count;
     }
 
-    // OCCUPIED ROOMS
     public int countOccupiedRooms() {
         return size - countAvailableRooms();
     }
