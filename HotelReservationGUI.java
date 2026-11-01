@@ -25,7 +25,7 @@ public class HotelReservationGUI extends JFrame {
 
 
         //// Pre-load Initial Default Rooms
-        tracker.addRoom(102, "Double", 1800);
+        tracker.addRoom(102, "Double", 1900);
         tracker.assignRoom(102, "Devine Grace");
         tracker.addRoom(101, "Single", 1500);
         tracker.assignRoom(101, "Aiza Datu");
