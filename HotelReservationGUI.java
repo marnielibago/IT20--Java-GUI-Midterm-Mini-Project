@@ -84,7 +84,7 @@ public class HotelReservationGUI extends JFrame {
         } else if ("Suite".equals(type)) {
             txtPrice.setText("3500");
         } else if ("Family".equals(type)) {
-            txtPrice.setText("5000");
+            txtPrice.setText("4000");
         }
     }
 
