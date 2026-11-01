@@ -38,7 +38,7 @@ public class HotelRoomReservationTracker1 {
         return -1;
     }
 
-    // ADD ROOM
+    // ADD ROOMS
     public boolean addRoom(int number, String type, double price) {
         if (size >= MAX_ROOMS
                 || number <= 0
