@@ -70,8 +70,7 @@ public class HotelReservationGUI extends JFrame {
         availabilityButton.addActionListener(e -> displayAvailability());
         assignVacateButton.addActionListener(e -> handleAssignOrVacate());
         searchButton.addActionListener(e -> searchRoom());
-        viewAllButton.addActionListener(e -> viewAllRooms());
-
+        viewAllButton.addActionListener(e -> showRoomsTable());
         pack();
     }
 
@@ -95,16 +94,18 @@ public class HotelReservationGUI extends JFrame {
             double price = Double.parseDouble(txtPrice.getText().trim());
             String guest = txtGuest.getText().trim();
 
-            if (tracker.addRoom(number, type, price)) {
-                if (!guest.isEmpty()) {
-                    tracker.assignRoom(number, guest);
-                }
+           if (tracker.addRoom(number, type, price)) {
+    if (!guest.isEmpty()) {
+        tracker.assignRoom(number, guest);
+    }
 
-                JOptionPane.showMessageDialog(this, "Room " + number + " recorded successfully!");
-                clearFields();
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to record: Duplicate room number, invalid price, or full storage.");
-            }
+    refreshRoomTable();
+    JOptionPane.showMessageDialog(this, "Room " + number + " recorded successfully!");
+    clearFields();
+
+} else {
+    JOptionPane.showMessageDialog(this, "Failed to record: Duplicate room number, invalid price, or full storage.");
+}
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Input Validation Error: Room Number and Price must be valid numbers.");
         }
@@ -141,22 +142,30 @@ public class HotelReservationGUI extends JFrame {
 
             //here is assigning and vacate
 
-            if (choice == 0) { 
-                String guest = txtGuest.getText().trim();
-                if (tracker.assignRoom(number, guest)) {
-                    JOptionPane.showMessageDialog(this, "Room " + number + " assigned to " + guest + "!");
-                    clearFields();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Failed: Room not found, already occupied, or guest name is empty.");
-                }
-            } else if (choice == 1) { // Vacate
-                if (tracker.vacateRoom(number)) {
-                    JOptionPane.showMessageDialog(this, "Room " + number + " vacated successfully!");
-                    clearFields();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Failed: Room not found or already available.");
-                }
-            }
+          if (choice == 0) {
+    String guest = txtGuest.getText().trim();
+
+    if (tracker.assignRoom(number, guest)) {
+
+        refreshRoomTable(); // NEW CODE - ADD HERE
+
+        JOptionPane.showMessageDialog(this, "Room " + number + " assigned to " + guest + "!");
+        clearFields();
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed: Room not found, already occupied, or guest name is empty.");
+    }else if (choice == 1) {
+    if (tracker.vacateRoom(number)) {
+
+        refreshRoomTable(); // NEW CODE - ADD HERE
+
+        JOptionPane.showMessageDialog(this, "Room " + number + " vacated successfully!");
+        clearFields();
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed: Room not found or already available.");
+    }
+}
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Input Validation Error: Enter a numeric room number.");
         }
@@ -215,6 +224,96 @@ public class HotelReservationGUI extends JFrame {
         txtGuest.setText("");
     }
 
+    
+    // NEW TABLE POPUP
+    private JDialog roomDialog;
+    private javax.swing.table.AbstractTableModel roomModel;
+
+    private void showRoomsTable() {
+
+        // If table is already open, bring it to front
+        if (roomDialog != null && roomDialog.isDisplayable()) {
+            refreshRoomTable();
+            roomDialog.toFront();
+            return;
+        }
+
+        // Table columns
+        String[] columns = {
+            "Room Number",
+            "Room Type",
+            "Price",
+            "Status",
+            "Guest Name"
+        };
+
+        // Table connected to backend array
+        roomModel = new javax.swing.table.AbstractTableModel() {
+
+            @Override
+            public int getRowCount() {
+                return tracker.getSize();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return columns.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columns[column];
+            }
+
+            @Override
+            public Object getValueAt(int row, int column) {
+
+                HotelRoomReservationTracker1.Room room =
+                        tracker.getRoomAt(row);
+
+                switch (column) {
+                    case 0: return room.roomNumber;
+                    case 1: return room.roomType;
+                    case 2: return room.price;
+                    case 3: return room.status;
+                    case 4: return room.guestName;
+                    default: return "";
+                }
+            }
+        };
+
+        JTable table = new JTable(roomModel);
+        table.setRowHeight(30);
+        table.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Create popup window
+        roomDialog = new JDialog(
+                this,
+                "All Recorded Rooms",
+                false
+        );
+
+        roomDialog.setSize(800, 400);
+        roomDialog.setLayout(new BorderLayout());
+        roomDialog.setDefaultCloseOperation(
+                JDialog.DISPOSE_ON_CLOSE
+        );
+
+        roomDialog.add(scrollPane, BorderLayout.CENTER);
+        roomDialog.setLocationRelativeTo(this);
+        roomDialog.setVisible(true);
+    }
+
+    // UPDATE TABLE WHEN RECORDS CHANGE
+    private void refreshRoomTable() {
+        if (roomModel != null) {
+            roomModel.fireTableDataChanged();
+        }
+    }
+
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new HotelReservationGUI().setVisible(true);
