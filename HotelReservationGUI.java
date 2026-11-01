@@ -78,7 +78,7 @@ public class HotelReservationGUI extends JFrame {
     private void updatePrice() {
         String type = (String) txtType.getSelectedItem();
         if ("Single".equals(type)) {
-            txtPrice.setText("1200");
+            txtPrice.setText("1500");
         } else if ("Double".equals(type)) {
             txtPrice.setText("1800");
         } else if ("Suite".equals(type)) {
