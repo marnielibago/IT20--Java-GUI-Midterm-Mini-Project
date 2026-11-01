@@ -127,18 +127,3 @@ public class HotelRoomReservationTracker1 {
         });
     }
 }
-=======
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package hotelroomreservationtracker1;
-
-/**
- *
- * @author HP
- */
-class HotelRoomReservationTracker1 {
-    
-}
->>>>>>> 44fc3c23a46c99c258049adbc67ca308f284c1b7
