@@ -29,7 +29,7 @@ public class HotelReservationGUI extends JFrame {
 
         txtNumber = new JTextField();
         txtType = new JComboBox<>(new String[]{"Single", "Double", "Suite"});
-        txtPrice = new JTextField("1200");
+        txtPrice = new JTextField("1500");
         txtGuest = new JTextField();
 
         txtType.addActionListener(e -> updatePrice());
@@ -80,7 +80,7 @@ public class HotelReservationGUI extends JFrame {
         if ("Single".equals(type)) {
             txtPrice.setText("1500");
         } else if ("Double".equals(type)) {
-            txtPrice.setText("1800");
+            txtPrice.setText("1900");
         } else if ("Suite".equals(type)) {
             txtPrice.setText("3500");
         }
@@ -209,7 +209,7 @@ public class HotelReservationGUI extends JFrame {
     private void clearFields() {
         txtNumber.setText("");
         txtType.setSelectedIndex(0);
-        txtPrice.setText("1200");
+        txtPrice.setText("1500");
         txtGuest.setText("");
     }
 
