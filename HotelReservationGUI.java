@@ -64,7 +64,8 @@ public class HotelReservationGUI extends JFrame {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        // ACTIONS
+        // Actions dayon here
+    
         addButton.addActionListener(e -> addRoom());
         availabilityButton.addActionListener(e -> displayAvailability());
         assignVacateButton.addActionListener(e -> handleAssignOrVacate());
@@ -136,7 +137,9 @@ public class HotelReservationGUI extends JFrame {
                     options[0]
             );
 
-            if (choice == 0) { // Assign
+            //here is assigning
+
+            if (choice == 0) { 
                 String guest = txtGuest.getText().trim();
                 if (tracker.assignRoom(number, guest)) {
                     JOptionPane.showMessageDialog(this, "Room " + number + " assigned to " + guest + "!");
