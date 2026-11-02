@@ -142,7 +142,7 @@ public class HotelReservationGUI extends JFrame {
 
                 JOptionPane.showMessageDialog(
                         this,
-                        "Room " + number + " recorded successfully!"
+                        "Room " + number + " Recorded successfully!"
                 );
 
                 clearFields();
