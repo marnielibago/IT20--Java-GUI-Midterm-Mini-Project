@@ -28,13 +28,15 @@ public class HotelReservationGUI extends JFrame {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         );
 
-       
+       //HOTEL ROOM TRACKER
         tracker.addRoom(101, "Single", 1500);
         tracker.assignRoom(101, "Aiza Datu");
 
         tracker.addRoom(103, "Suite", 3500);
         tracker.assignRoom(103, "Kei Nagase");
 
+        tracker.addRoom(209, "Double" 1900);
+        tracker.assignRoom(209, "Marnie";
        
         JPanel form = new JPanel(new GridLayout(4, 2, 8, 8));
         form.setBorder(
@@ -117,7 +119,7 @@ public class HotelReservationGUI extends JFrame {
         }
     }
 
-    // ADD ROOM
+    // ADDING ROOM
     private void addRoom() {
         try {
             int number = Integer.parseInt(txtNumber.getText().trim());
