@@ -1,6 +1,6 @@
 public class HotelRoomReservationTracker1 {
 
-    
+   // Para Stores information about sa each hotel room.
     public static class Room {
         public int roomNumber;
         public String roomType, guestName, status;
@@ -15,6 +15,8 @@ public class HotelRoomReservationTracker1 {
         }
     }
 
+    // Para sa Stores guest booking informatio
+
     public static class Booking {
         public int roomNumber;
         public String guestName;
@@ -24,12 +26,16 @@ public class HotelRoomReservationTracker1 {
             guestName = guest;
         }
     }
-
+    
+     // Para sa Stores hotel rooms and waiting reservations.
     private final Room[] rooms = new Room[100];
     private int size = 0;
     private final Booking[] waitingQueue = new Booking[100];
     private int queueSize = 0;
 
+
+    // Para sa Finds sa room using its room number.
+    
     public int searchRoom(int number) {
         for (int i = 0; i < size; i++) {
             if (rooms[i].roomNumber == number) {
@@ -38,6 +44,8 @@ public class HotelRoomReservationTracker1 {
         }
         return -1;
     }
+
+    // Adds sa new room to the hotel room list
 
     public boolean addRoom(int number, String type, double price) {
         if (size == rooms.length || number <= 0 ||
@@ -49,7 +57,8 @@ public class HotelRoomReservationTracker1 {
         rooms[size++] = new Room(number, type.trim(), price);
         return true;
     }
-
+    
+//Assigns a guest to an available hotel room.
     public boolean assignRoom(int number, String guest) {
         int i = searchRoom(number);
         if (i == -1 || guest == null || guest.trim().isEmpty() ||
